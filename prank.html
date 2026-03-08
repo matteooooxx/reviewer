@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HIWAGA DI DIABLO</title>
+<style>
+body{
+  margin:0;
+  background:black;
+  color:red;
+  font-family:'Arial Black', Gadget, sans-serif;
+  overflow:hidden;
+  text-align:center;
+}
+
+#warning {
+  font-size:40px;
+  margin-top:20px;
+  animation: flash 0.5s infinite;
+  font-weight:bold;
+  letter-spacing:2px;
+}
+
+@keyframes flash {
+  0% {opacity:1;}
+  50% {opacity:0;}
+  100% {opacity:1;}
+}
+
+#scan-box {
+  width:90%;
+  margin:20px auto;
+  border:3px solid red;
+  padding:20px;
+  font-size:18px;
+  background:black;
+  animation: shake 0.3s infinite;
+}
+
+@keyframes shake {
+  0%{transform:translate(0);}
+  25%{transform:translate(8px);}
+  50%{transform:translate(-8px);}
+  75%{transform:translate(8px);}
+  100%{transform:translate(0);}
+}
+
+#progress-container{
+  width:80%;
+  height:25px;
+  border:2px solid red;
+  margin:20px auto;
+}
+
+#progress-bar{
+  width:0%;
+  height:100%;
+  background:red;
+}
+
+#countdown {
+  font-size:50px;
+  margin-top:20px;
+  color:red;
+  animation: pulse 1s infinite;
+  font-weight:bold;
+}
+
+@keyframes pulse {
+  0%{transform:scale(1);}
+  50%{transform:scale(1.2);}
+  100%{transform:scale(1);}
+}
+
+#scan-line {
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:2px;
+  background:red;
+  animation: scan 2s linear infinite;
+}
+
+@keyframes scan{
+  0%{left:-100%;}
+  100%{left:100%;}
+}
+
+#fake-button {
+  margin-top:30px;
+  padding:15px 30px;
+  background:black;
+  color:red;
+  border:2px solid red;
+  font-size:22px;
+  font-weight:bold;
+  cursor:pointer;
+  animation: flash 1s infinite;
+}
+
+#fake-button:hover{
+  background:red;
+  color:black;
+}
+</style>
+</head>
+<body>
+
+<div id="warning">⚠ HIWAGA DI DIABLO ⚠</div>
+
+<div id="scan-box">
+  Device scan in progress...<br>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+  Status: <span id="status-text">Scanning files...</span>
+</div>
+
+<div id="countdown">10</div>
+
+<div id="scan-line"></div>
+
+<div id="fake-button">Tap to Remove Virus</div>
+
+<audio id="alarm">
+  <source src="Danger Alarm Sound Effect.mp3" type="audio/wav">
+</audio>
+
+<script>
+// Countdown timer
+let countdown = document.getElementById('countdown');
+let scanBox = document.getElementById('scan-box');
+let statusText = document.getElementById('status-text');
+let progressBar = document.getElementById('progress-bar');
+let time = 10;
+let progress = 0;
+let timer = setInterval(()=>{
+  time--;
+  countdown.textContent = time;
+  if(time <=0){
+    clearInterval(timer);
+    countdown.textContent = "YOU GOT HACKED BY MATTHEW";
+    countdown.style.color = "yellow";
+    countdown.style.fontSize = "50px";
+    scanBox.innerHTML = "All your files are compromised!";
+  }
+},1000);
+
+// Fake scanning progress
+let scanProgress = setInterval(()=>{
+  if(progress < 100){
+    progress += Math.floor(Math.random()*5);
+    if(progress>100) progress=100;
+    progressBar.style.width = progress + "%";
+    if(progress<30) statusText.textContent="Scanning system files...";
+    else if(progress<60) statusText.textContent="Scanning media files...";
+    else if(progress<90) statusText.textContent="Scanning contacts...";
+    else statusText.textContent="Almost done...";
+  }
+},300);
+
+// Fake “Remove Virus” button
+let fakeButton = document.getElementById('fake-button');
+let alarm = document.getElementById('alarm');
+
+fakeButton.addEventListener('click', ()=>{
+  // Update UI
+  scanBox.innerHTML = "Virus removal failed!";
+  countdown.textContent = "YOU GOT HACKED BY MATTHEW";
+  countdown.style.color = "yellow";
+  countdown.style.fontSize = "50px";
+
+  // Continuous vibration
+  if(navigator.vibrate){
+    window.vibrationInterval = setInterval(()=>navigator.vibrate([500,100]),600);
+  }
+
+  // Play alarm continuously
+  alarm.loop = true;
+  alarm.play().catch(()=>{console.log("User gesture required to play sound");});
+});
+</script>
+
+</body>
+</html>
